@@ -1,7 +1,7 @@
 import java.util.LinkedList;
 import java.util.Queue;
 
-public class CardDeck implements Runnable {
+public class CardDeck extends Thread {
     private Queue<Card> deck = new LinkedList<>();
     private Boolean done = false;
 
