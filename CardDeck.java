@@ -1,13 +1,29 @@
-import java.util.Stack;
+import java.util.LinkedList;
+import java.util.Queue;
 
-public class CardDeck {
-    private Stack<Card> deck = new Stack<Card>();
+public class CardDeck implements Runnable {
+    private Queue<Card> deck = new LinkedList<>();
+    private Boolean done = false;
 
-    public void addToDeck(Card card) {
-        deck.push(card);
+    public void run() {
+        while (!done) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
-    public Card removeCard() {
-        return deck.pop();
+    public synchronized void addToDeck(Card card) {
+        deck.add(card);
+    }
+
+    public synchronized Card removeCard() {
+        return deck.remove();
+    }
+
+    public synchronized void stopThread() {
+        done = true;
     }
 }
