@@ -4,11 +4,14 @@ public class Player extends Thread {
     private final int playerNumber;
     private Boolean done = false;
     private ArrayList<Card> cardsList = new ArrayList<Card>();
-    private int count = 0;
 
     public void run() {
-        while (!Thread.interrupted()) {
-            count++; // arbitrary calculation
+        while (!done) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -26,9 +29,5 @@ public class Player extends Thread {
 
     public synchronized void stopThread() {
         done = true;
-    }
-
-    public synchronized void print() {
-        System.out.println(this.getName() + "Printed");
     }
 }
