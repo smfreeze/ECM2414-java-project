@@ -36,17 +36,21 @@ public class CardGame {
         // will be an equal amount of deck threads, also started here)
         for (int x = 0; x < playerCount; x++) {
             playerArray[x] = new Player(x + 1);
-            playerArray[x].start();
             deckArray[x] = new CardDeck();
-            deckArray[x].start();
         }
-        // Deals the cards in a round robin fashion to the players
-        for (int x = 0; x < playerCount * 4; x++) {
-            playerArray[x % playerCount].addCard(pack.get(x));
+        // Deals the cards in a round robin fashion to the players and
+        // Decks using deal hand function
+        dealHand(playerArray, deckArray, playerCount, pack);
+        playerArray[0].getSize();
+    }
+
+    public static void dealHand(Player[] playerArr, CardDeck[] cardArr, int count, ArrayList<Card> pack) {
+        for (int x = 0; x < count * 4; x++) {
+            playerArr[x % count].addCard(pack.get(x));
         }
         // Also deals the cards in a round robin fashion to the decks
-        for (int x = 0; x < playerCount * 4; x++) {
-            deckArray[x % playerCount].addToDeck(pack.get(x));
+        for (int x = 0; x < count * 4; x++) {
+            cardArr[x % count].addCard(pack.get(x));
         }
     }
 
