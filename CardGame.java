@@ -33,6 +33,27 @@ public class CardGame {
             pack = terminalReader.next();
         }
         terminalReader.close();
+        // Creates 2 arrays for the player and for the card deck threads
+        Player[] playerArray = new Player[playerCount];
+        CardDeck[] deckArray = new CardDeck[playerCount];
+
+        // Initialises and starts the threads for as many players as there are (there
+        // will be an equal amount of deck threads, also started here)
+        for (int x = 0; x < playerCount; x++) {
+            playerArray[x] = new Player(x + 1);
+            playerArray[x].start();
+            deckArray[x] = new CardDeck();
+            deckArray[x].start();
+        }
+        int a = 0;
+        for (int x = 0; x < playerCount * 4; x++) {
+            playerArray[a].addCard(new Card(cardValuesArray.get(x)));
+            if (a + 1 >= playerCount) {
+                a = 0;
+            } else {
+                a++;
+            }
+        }
     }
 
     public static boolean checkPack(String file, int players) {
