@@ -40,11 +40,14 @@ public class CardGame {
             deckArray[x] = new CardDeck();
             deckArray[x].start();
         }
-        // Deals the cards in a round robin fashion
+        // Deals the cards in a round robin fashion to the players
         for (int x = 0; x < playerCount * 4; x++) {
             playerArray[x % playerCount].addCard(pack.get(x));
         }
-        playerArray[1].getSize();
+        // Also deals the cards in a round robin fashion to the decks
+        for (int x = 0; x < playerCount * 4; x++) {
+            deckArray[x % playerCount].addToDeck(pack.get(x));
+        }
     }
 
     public static int checkPlayers(String players) {
@@ -69,13 +72,13 @@ public class CardGame {
             // Tries to open file from user pack location input
             File f = new File(file);
             Scanner read = new Scanner(f);
-            // If succeeds, loop through each line in file, confirm it 
+            // If succeeds, loop through each line in file, confirm it
             // is an integer, instantiates card and adds to array
             // of cards. Also counts number of lines for future
             // verification.
             while (read.hasNextLine()) {
                 String data = read.nextLine();
-                int num = Integer.parseInt(data); 
+                int num = Integer.parseInt(data);
                 if (num < 0) {
                     read.close();
                     return new ArrayList<Card>();
