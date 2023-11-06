@@ -65,8 +65,8 @@ public class CardGame {
                 cards.add(new Card(num));
                 count++;
             }
-            // Checks number of lines is valid, returns the array of
-            // cards if so, else returns empty array list.
+            // Checks number of lines is invalid, returns empty array
+            // list, else returns the array of cards.
             if (count != 8 * players) {
                 read.close();
                 return new ArrayList<Card>();
