@@ -27,6 +27,24 @@ public class CardGame {
             pack = checkPack(terminalReader.next(), playerCount);
         }
         terminalReader.close();
+
+        // Creates 2 arrays for the player and for the card deck threads
+        Player[] playerArray = new Player[playerCount];
+        CardDeck[] deckArray = new CardDeck[playerCount];
+
+        // Initialises and starts the threads for as many players as there are (there
+        // will be an equal amount of deck threads, also started here)
+        for (int x = 0; x < playerCount; x++) {
+            playerArray[x] = new Player(x + 1);
+            playerArray[x].start();
+            deckArray[x] = new CardDeck();
+            deckArray[x].start();
+        }
+        // Deals the cards in a round robin fashion
+        for (int x = 0; x < playerCount * 4; x++) {
+            playerArray[x % playerCount].addCard(pack.get(x));
+        }
+        playerArray[1].getSize();
     }
 
     public static int checkPlayers(String players) {
