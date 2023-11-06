@@ -4,64 +4,76 @@ import java.util.ArrayList;
 
 public class CardGame {
     public static void main(String[] args) {
-        //asks user to input number of players
+        // Input number of players
         System.out.println("Please enter the number of players:");
-        Scanner terminalReader = new Scanner(System.in); //opens reader
+        Scanner terminalReader = new Scanner(System.in);
         int playerCount = checkPlayers(terminalReader.next());
-        while (playerCount == 0) { //stops when value is not 0
+        // Loops until the number of players is validated by checkPlayers function
+        while (playerCount == 0) {
             System.out.println("");
             System.out.println("Invalid entry");
             System.out.println("Please enter the number of players:");
-            playerCount = checkPlayers(terminalReader.next()); //keeps asking if invalid
+            playerCount = checkPlayers(terminalReader.next());
         }
 
-        //asks user to input pack file location
+        // Input the pack file location
         System.out.println("Please enter location of pack to load:");
         ArrayList<Card> pack = checkPack(terminalReader.next(), playerCount);
-        while (pack.isEmpty()) { //stops when arraylist is not empty
+        // Loops until the pack file has been validated by checkPack function
+        while (pack.isEmpty()) {
             System.out.println("");
             System.out.println("Invalid pack file");
             System.out.println("Please enter location of pack to load:");
-            pack = checkPack(terminalReader.next(), playerCount); //keeps asking if invalid
+            pack = checkPack(terminalReader.next(), playerCount);
         }
-        terminalReader.close(); //closes reader
+        terminalReader.close();
     }
 
     public static int checkPlayers(String players) {
         int playerCount = 0;
-        try { //checks if input is a invalid int
+        // Check if input players can be converted to an integer
+        try {
             playerCount = Integer.parseInt(players);
-            if (Integer.parseInt(players) > 0) { //exits if positive
+            if (Integer.parseInt(players) > 0) {
                 return playerCount;
+                // Returns if this is the case (verifying the player input)
             }
         } catch (Exception e) {
         }
-        return 0; //invalid number of players
+        // Else, return 0 for invalid user input
+        return 0;
     }
 
     public static ArrayList<Card> checkPack(String file, int players) {
         int count = 0;
         ArrayList<Card> cards = new ArrayList<Card>();
         try {
-            File f = new File(file); //opens text file
+            // Tries to open file from user pack location input
+            File f = new File(file);
             Scanner read = new Scanner(f);
-            while (read.hasNextLine()) { //continues if there is a next line
+            // If succeeds, loop through each line in file, confirm it 
+            // is an integer, instantiates card and adds to array
+            // of cards. Also counts number of lines for future
+            // verification.
+            while (read.hasNextLine()) {
                 String data = read.nextLine();
-                int num = Integer.parseInt(data); //converts line to integer
-                if (num < 0) { //checks if in is negative
+                int num = Integer.parseInt(data); 
+                if (num < 0) {
                     read.close();
-                    return new ArrayList<Card>(); //empty arraylist
+                    return new ArrayList<Card>();
                 }
-                cards.add(new Card(num)); //adds card object
-                count++; //increments count
+                cards.add(new Card(num));
+                count++;
             }
-            if (count != 8 * players) { //checks if count is the incorrect size
+            // Checks number of lines is valid, returns the array of
+            // cards if so, else returns empty array list.
+            if (count != 8 * players) {
                 read.close();
                 return new ArrayList<Card>();
             }
             read.close();
             return cards;
-        } catch (Exception e) { //file not found and string to integer error
+        } catch (Exception e) {
             return new ArrayList<Card>();
         }
     }
