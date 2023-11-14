@@ -29,24 +29,45 @@ public class CardGame {
         terminalReader.close();
 
         // Creates 2 arrays for the player and for the card deck threads
-        Player[] playerArray = new Player[playerCount];
+        Thread[] playerThreadsArray = new Thread[playerCount];
         CardDeck[] deckArray = new CardDeck[playerCount];
 
-        // Initialises and starts the threads for as many players as there are (there
-        // will be an equal amount of deck threads, also started here)
+        ArrayList<ArrayList<Card>> tempPlayersArray = new ArrayList<ArrayList<Card>>();
         for (int x = 0; x < playerCount; x++) {
-            playerArray[x] = new Player(x + 1);
+            tempPlayersArray.add(new ArrayList<Card>());
+        }
+
+        // Initialises the card decks:
+        for (int x = 0; x < playerCount; x++) {
             deckArray[x] = new CardDeck();
         }
-        // Deals the cards in a round robin fashion to the players and
-        // Decks using deal hand function
-        dealHand(playerArray, deckArray, playerCount, pack);
+
+        dealHand(tempPlayersArray, deckArray, playerCount, pack);
+
+        // And then all the player threads, so we can pass in the left and right card
+        // decks:
+        for (int x = 0; x < playerCount; x++) {
+            if (x == 0) {
+                playerThreadsArray[x] = new Thread(
+                        new Player(x + 1, tempPlayersArray.get(x), deckArray[playerCount - 1], deckArray[1]));
+            } else if (x == playerCount - 1) {
+                playerThreadsArray[x] = new Thread(
+                        new Player(x + 1, tempPlayersArray.get(x), deckArray[playerCount - 2], deckArray[0]));
+            } else {
+                playerThreadsArray[x] = new Thread(
+                        new Player(x + 1, tempPlayersArray.get(x), deckArray[playerCount - 1],
+                                deckArray[playerCount + 1]));
+            }
+        }
+
+        playerThreadsArray[0].start();
     }
 
-    public static void dealHand(Player[] playerArr, CardDeck[] cardArr, int count, ArrayList<Card> pack) {
+    public static void dealHand(ArrayList<ArrayList<Card>> players, CardDeck[] cardArr, int count,
+            ArrayList<Card> pack) {
         // Deals players their cards in round robin fashion
         for (int x = 0; x < count * 4; x++) {
-            playerArr[x % count].addCard(pack.get(x));
+            players.get(x % count).add(pack.get(x));
         }
         // Also deals the cards in a round robin fashion to the decks
         for (int x = 0; x < count * 4; x++) {
