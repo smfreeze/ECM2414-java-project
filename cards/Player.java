@@ -1,17 +1,14 @@
 import java.util.ArrayList;
 
-public class Player extends Thread {
+public class Player implements Runnable {
     private final int playerNumber;
     private Boolean done = false;
     private ArrayList<Card> cardsList = new ArrayList<Card>();
 
+    @Override
     public void run() {
         while (!done) {
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+
         }
     }
 
