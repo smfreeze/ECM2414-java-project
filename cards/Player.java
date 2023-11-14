@@ -1,3 +1,4 @@
+package cards;
 import java.util.ArrayList;
 
 public class Player implements Runnable {
@@ -9,11 +10,17 @@ public class Player implements Runnable {
 
     @Override
     public void run() {
-        for (Card value : cardsList) {
-            System.out.println(value.getNumber());
+        while (!done) {
+            int removePos = cardToRemove();
+            if (removePos != -1) {
+                cardsList.add(leftDeck.removeCard());
+                rightDeck.addCard(cardsList.remove(removePos));
+            } else {
+                System.out.println(playerNumber);
+                continue;
+                // win condition
+            }
         }
-        leftDeck.printDeck();
-        rightDeck.printDeck();
     }
 
     public Player(int playerNumber, ArrayList<Card> cardsList, CardDeck leftDeck, CardDeck rightDeck) {
@@ -23,17 +30,13 @@ public class Player implements Runnable {
         this.rightDeck = rightDeck;
     }
 
-    /*
-     * private synchronized Card removeCard(int pos) {
-     * return cardsList.remove(pos);
-     * }
-     * 
-     * private synchronized void addCard(Card card) {
-     * cardsList.add(card);
-     * }
-     * 
-     * private synchronized void stopThread() {
-     * done = true;
-     * }
-     */
+    private int cardToRemove() {
+        for (int pos = 0; pos < cardsList.size(); pos++) {
+            if (cardsList.get(pos).getNumber() != playerNumber) {
+                return pos;
+            }
+        }
+        return -1;
+    }
+
 }

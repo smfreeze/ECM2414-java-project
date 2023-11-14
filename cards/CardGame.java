@@ -1,3 +1,4 @@
+package cards;
 import java.util.Scanner;
 import java.io.File;
 import java.util.ArrayList;
@@ -42,37 +43,30 @@ public class CardGame {
             deckArray[x] = new CardDeck();
         }
 
-        dealHand(tempPlayersArray, deckArray, playerCount, pack);
+        // Deals players their cards in round robin fashion
+        for (int x = 0; x < playerCount * 4; x++) {
+            tempPlayersArray.get(x % playerCount).add(pack.get(x));
+        }
+        // Also deals the cards in a round robin fashion to the decks
+        for (int x = 0; x < playerCount * 4; x++) {
+            deckArray[x % playerCount].addCard(pack.get(x));
+        }
 
         // And then all the player threads, so we can pass in the left and right card
         // decks:
         for (int x = 0; x < playerCount; x++) {
-            if (x == 0) {
-                playerThreadsArray[x] = new Thread(
-                        new Player(x + 1, tempPlayersArray.get(x), deckArray[playerCount - 1], deckArray[1]));
-            } else if (x == playerCount - 1) {
-                playerThreadsArray[x] = new Thread(
-                        new Player(x + 1, tempPlayersArray.get(x), deckArray[playerCount - 2], deckArray[0]));
+            if (x == playerCount - 1) {
+                playerThreadsArray[x] = new Thread(new Player(x+1, tempPlayersArray.get(x), deckArray[x], deckArray[0]));
             } else {
-                playerThreadsArray[x] = new Thread(
-                        new Player(x + 1, tempPlayersArray.get(x), deckArray[playerCount - 1],
-                                deckArray[playerCount + 1]));
+                playerThreadsArray[x] = new Thread(new Player(x+1, tempPlayersArray.get(x), deckArray[x], deckArray[x + 1]));
             }
         }
 
-        playerThreadsArray[0].start();
-    }
+        for (int x = 0; x < playerCount; x++) {
+            playerThreadsArray[x].start();
+        }
+        //START THREADS
 
-    public static void dealHand(ArrayList<ArrayList<Card>> players, CardDeck[] cardArr, int count,
-            ArrayList<Card> pack) {
-        // Deals players their cards in round robin fashion
-        for (int x = 0; x < count * 4; x++) {
-            players.get(x % count).add(pack.get(x));
-        }
-        // Also deals the cards in a round robin fashion to the decks
-        for (int x = 0; x < count * 4; x++) {
-            cardArr[x % count].addCard(pack.get(x));
-        }
     }
 
     public static int checkPlayers(String players) {
@@ -80,7 +74,7 @@ public class CardGame {
         // Check if input players can be converted to an integer
         try {
             playerCount = Integer.parseInt(players);
-            if (Integer.parseInt(players) > 0) {
+            if (Integer.parseInt(players) > 1) {
                 return playerCount;
                 // Returns if this is the case (verifying the player input)
             }
