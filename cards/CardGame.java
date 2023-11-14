@@ -41,10 +41,10 @@ public class CardGame {
         // Deals the cards in a round robin fashion to the players and
         // Decks using deal hand function
         dealHand(playerArray, deckArray, playerCount, pack);
-        playerArray[0].getSize();
     }
 
     public static void dealHand(Player[] playerArr, CardDeck[] cardArr, int count, ArrayList<Card> pack) {
+        // Deals players their cards in round robin fashion
         for (int x = 0; x < count * 4; x++) {
             playerArr[x % count].addCard(pack.get(x));
         }
