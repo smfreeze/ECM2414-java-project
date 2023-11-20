@@ -12,4 +12,8 @@ public class CardDeck {
     public synchronized Card removeCard() {
         return deck.remove();
     }
+
+    public synchronized Card getSize() {
+        return deck.size();
+    }
 }
