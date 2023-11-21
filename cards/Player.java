@@ -55,7 +55,7 @@ public class Player implements Runnable {
                             writer.write("player " + playerNumber + " final hand:" + handToString() + "\n");
                         }
                     }
-                    return;
+                    return; // Returns and kills thread, so next part is only run if they aren't the winner:
                 }
             }
             writer.write("player " + winner + " has informed player " + playerNumber + " that player "
