@@ -1,4 +1,5 @@
 package cards;
+
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -13,7 +14,15 @@ public class CardDeck {
         return deck.remove();
     }
 
-    public synchronized Card getSize() {
+    public synchronized Integer getSize() {
         return deck.size();
+    }
+
+    public synchronized String printDeck() {
+        String text = "";
+        for (Card s : deck) {
+            text += s.getNumber().toString();
+        }
+        return text;
     }
 }

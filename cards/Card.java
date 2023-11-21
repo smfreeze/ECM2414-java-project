@@ -1,13 +1,13 @@
 package cards;
 
 public class Card {
-    private int number;
+    private Integer number;
 
-    public Card(int number) {
+    public Card(Integer number) {
         this.number = number;
     }
 
-    public int getNumber() {
+    public synchronized Integer getNumber() {
         return number;
     }
 }
