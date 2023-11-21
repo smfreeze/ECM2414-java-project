@@ -34,8 +34,7 @@ public class CardGame {
         // Creates 2 arrays for the player and for the card deck threads
         Thread[] playerThreadsArray = new Thread[playerCount];
         CardDeck[] deckArray = new CardDeck[playerCount];
-        Boolean[] winCheckArray = new Boolean[playerCount];
-        Arrays.fill(winCheckArray, Boolean.FALSE);
+        Player[] playersArray = new Player[playerCount];
 
         ArrayList<ArrayList<Card>> tempPlayersArray = new ArrayList<ArrayList<Card>>();
         for (int x = 0; x < playerCount; x++) {
@@ -60,28 +59,16 @@ public class CardGame {
         // decks:
         for (int x = 0; x < playerCount; x++) {
             if (x == playerCount - 1) {
-                playerThreadsArray[x] = new Thread(
-                        new Player(x + 1, tempPlayersArray.get(x), deckArray[x], deckArray[0], winCheckArray[x]));
+                playersArray[x] = new Player(x + 1, tempPlayersArray.get(x), deckArray[x], deckArray[0]);
+                playerThreadsArray[x] = new Thread(playersArray[x]);
             } else {
-                playerThreadsArray[x] = new Thread(
-                        new Player(x + 1, tempPlayersArray.get(x), deckArray[x], deckArray[x + 1], winCheckArray[x]));
+                playersArray[x] = new Player(x + 1, tempPlayersArray.get(x), deckArray[x], deckArray[x + 1]);
+                playerThreadsArray[x] = new Thread(playersArray[x]);
             }
         }
 
-        for (int x = 0; x < playerCount; x++) {
-            playerThreadsArray[x].start();
-        }
-
-        Integer winner = null;
-        while (winner == null) {
-            for (int n = 0; n < winCheckArray.length; n++) {
-                if (winCheckArray[n]) {
-                    winner = n + 1;
-                    for (int x = 0; x < playerCount; x++) {
-                        winCheckArray[x] = Boolean.TRUE;
-                    }
-                }
-            }
+        for (Thread playerThread : playerThreadsArray) {
+            playerThread.start();
         }
     }
 
