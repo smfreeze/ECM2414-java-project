@@ -75,14 +75,6 @@ public class Player implements Runnable {
         return builder.toString().trim();
     }
 
-    private synchronized String printDeck2() {
-        String text = "";
-        for (Card s : cardsList) {
-            text += s.getNumber().toString();
-        }
-        return text;
-    }
-
     public Player(int playerNumber, ArrayList<Card> cardsList, CardDeck leftDeck, CardDeck rightDeck) {
         this.playerNumber = playerNumber;
         this.cardsList = cardsList;
