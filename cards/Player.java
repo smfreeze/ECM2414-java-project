@@ -54,6 +54,7 @@ public class Player implements Runnable {
                             writer.write("player " + playerNumber + " wins\n");
                             writer.write("player " + playerNumber + " exits\n");
                             writer.write("player " + playerNumber + " final hand:" + handToString() + "\n");
+                            System.out.println("player " + playerNumber + " wins");
                         }
                     }
                     return;
