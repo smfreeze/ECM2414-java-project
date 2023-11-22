@@ -34,12 +34,13 @@ public class Player implements Runnable {
                             Card drawnCard = leftDeck.removeCard();
                             cardsList.add(drawnCard);
                             writer.write(
-                                    "player " + playerNumber + " draws a " + drawnCard.getNumber() + " from deck _\n"); // ADD-DECK-NUMBER
+                                    "player " + playerNumber + " draws a " + drawnCard.getNumber() + " from deck "
+                                            + leftDeck.getNumber() + "\n");
 
                             // Discard and log card to file
                             writer.write(
                                     "player " + playerNumber + " discards a " + cardsList.get(removePos).getNumber()
-                                            + " to deck _\n"); // ADD-DECK-NUMBER
+                                            + " to deck " + rightDeck.getNumber() + "\n");
                             rightDeck.addCard(cardsList.remove(removePos));
 
                             // Log current hand to file
@@ -55,7 +56,7 @@ public class Player implements Runnable {
                             writer.write("player " + playerNumber + " final hand:" + handToString() + "\n");
                         }
                     }
-                    return; // Returns, killing thread, so next part is only run if they aren't the winner:
+                    return;
                 }
             }
             writer.write("player " + winner + " has informed player " + playerNumber + " that player "

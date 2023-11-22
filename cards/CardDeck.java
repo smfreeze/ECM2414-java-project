@@ -5,9 +5,18 @@ import java.util.Queue;
 
 public class CardDeck {
     private Queue<Card> deck = new LinkedList<>();
+    private Integer number;
+
+    public CardDeck(Integer number) {
+        this.number = number;
+    }
 
     public synchronized void addCard(Card card) {
         deck.add(card);
+    }
+
+    public synchronized Integer getNumber() {
+        return number;
     }
 
     public synchronized Card removeCard() {
@@ -16,13 +25,5 @@ public class CardDeck {
 
     public synchronized Integer getSize() {
         return deck.size();
-    }
-
-    public synchronized String printDeck() {
-        String text = "";
-        for (Card s : deck) {
-            text += s.getNumber().toString();
-        }
-        return text;
     }
 }

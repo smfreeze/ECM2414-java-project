@@ -43,7 +43,7 @@ public class CardGame {
 
         // Initialises the card decks:
         for (int x = 0; x < playerCount; x++) {
-            deckArray[x] = new CardDeck();
+            deckArray[x] = new CardDeck(x + 1);
         }
 
         // Deals players their cards in round robin fashion
