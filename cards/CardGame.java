@@ -52,7 +52,7 @@ public class CardGame {
         }
         // Also deals the cards in a round robin fashion to the decks
         for (int x = 0; x < playerCount * 4; x++) {
-            deckArray[x % playerCount].addCard(pack.get(x));
+            deckArray[x % playerCount].addCard(pack.get(playerCount * 4 + x));
         }
 
         // And then all the player threads, so we can pass in the left and right card

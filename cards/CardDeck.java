@@ -6,13 +6,16 @@ import java.util.Queue;
 public class CardDeck {
     private Queue<Card> deck = new LinkedList<>();
     private Integer number;
+    public static final Object globalLock = new Object();
 
     public CardDeck(Integer number) {
         this.number = number;
     }
 
     public synchronized void addCard(Card card) {
-        deck.add(card);
+        synchronized (globalLock) {
+            deck.add(card);
+        }
     }
 
     public synchronized Integer getNumber() {
@@ -20,10 +23,20 @@ public class CardDeck {
     }
 
     public synchronized Card removeCard() {
-        return deck.remove();
+        synchronized (globalLock) {
+            return deck.remove();
+        }
     }
 
     public synchronized Integer getSize() {
         return deck.size();
+    }
+
+    public String handToString() {
+        StringBuilder builder = new StringBuilder();
+        for (Card card : deck) {
+            builder.append(card.getNumber()).append(" ");
+        }
+        return builder.toString().trim();
     }
 }
