@@ -24,7 +24,10 @@ public class CardDeck {
 
     public synchronized Card removeCard() {
         synchronized (globalLock) {
-            return deck.remove();
+            if (deck.size() != 0) {
+                return deck.remove();
+            }
+            return null;
         }
     }
 

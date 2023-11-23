@@ -1,9 +1,12 @@
 package cards;
 
 import java.util.Scanner;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashSet;
 
 public class CardGame {
     public static void main(String[] args) {
@@ -37,11 +40,15 @@ public class CardGame {
         Player[] playersArray = new Player[playerCount];
 
         ArrayList<ArrayList<Card>> tempPlayersArray = new ArrayList<ArrayList<Card>>();
+        ArrayList<ArrayList<Integer>> playersCardNumbersArray = new ArrayList<ArrayList<Integer>>();
+
+        // Initialises the player hands
         for (int x = 0; x < playerCount; x++) {
             tempPlayersArray.add(new ArrayList<Card>());
+            playersCardNumbersArray.add(new ArrayList<Integer>());
         }
 
-        // Initialises the card decks:
+        // Initialises the card decks
         for (int x = 0; x < playerCount; x++) {
             deckArray[x] = new CardDeck(x + 1);
         }
@@ -49,29 +56,64 @@ public class CardGame {
         // Deals players their cards in round robin fashion
         for (int x = 0; x < playerCount * 4; x++) {
             tempPlayersArray.get(x % playerCount).add(pack.get(x));
-        }
-        // Also deals the cards in a round robin fashion to the decks
-        for (int x = 0; x < playerCount * 4; x++) {
-            deckArray[x % playerCount].addCard(pack.get(playerCount * 4 + x));
+            playersCardNumbersArray.get(x % playerCount).add(pack.get(x).getNumber());
         }
 
-        // And then all the player threads, so we can pass in the left and right card
-        // decks:
-        for (int x = 0; x < playerCount; x++) {
-            if (x == playerCount - 1) {
-                playersArray[x] = new Player(x + 1, tempPlayersArray.get(x), deckArray[x], deckArray[0]);
-                playerThreadsArray[x] = new Thread(playersArray[x]);
-            } else {
-                playersArray[x] = new Player(x + 1, tempPlayersArray.get(x), deckArray[x], deckArray[x + 1]);
-                playerThreadsArray[x] = new Thread(playersArray[x]);
+        int startWin = -1;
+        for (int pos = 0; pos < playersCardNumbersArray.size(); pos++) {
+            if (new HashSet<Integer>(playersCardNumbersArray.get(pos)).size() == 1) {
+                startWin = pos+1;
+                break;
             }
         }
 
-        for (Thread playerThread : playerThreadsArray) {
-            playerThread.start();
+        if (startWin != -1) {
+            for (int playerNumber = 1; playerNumber < tempPlayersArray.size()+1; playerNumber++) {
+                String fileName = "player" + playerNumber + "_output.txt";
+                StringBuilder builder = new StringBuilder();
+                for (Integer cardNum : playersCardNumbersArray.get(playerNumber-1)) {
+                    builder.append(cardNum+" ");
+                }
+                try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
+                    writer.write("player " + playerNumber + " initial hand " + builder + "\n");
+                    if (playerNumber == startWin) {
+                        writer.write("player " + playerNumber + " wins\n");
+                        writer.write("player " + playerNumber + " exits\n");
+                        writer.write("player " + playerNumber + " final hand:" + builder + "\n");
+                        System.out.println("player " + playerNumber + " wins");
+                    } else {
+                        writer.write("player " + startWin + " has informed player " + playerNumber + " that player " + startWin + " has won\n");
+                        writer.write("player " + playerNumber + " exits\n");
+                        writer.write("player " + playerNumber + " final hand: " + builder + "\n");
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        } else {
+            // Deals the cards in a round robin fashion to the decks
+            for (int x = 0; x < playerCount * 4; x++) {
+                deckArray[x % playerCount].addCard(pack.get(x));
+            }
+
+            // And then all the player threads, so we can pass in the left and right card
+            // decks:
+            for (int x = 0; x < playerCount; x++) {
+                if (x == playerCount - 1) {
+                    playersArray[x] = new Player(x + 1, tempPlayersArray.get(x), deckArray[x], deckArray[0]);
+                    playerThreadsArray[x] = new Thread(playersArray[x]);
+                } else {
+                    playersArray[x] = new Player(x + 1, tempPlayersArray.get(x), deckArray[x], deckArray[x + 1]);
+                    playerThreadsArray[x] = new Thread(playersArray[x]);
+                }
+            }
+
+            for (Thread playerThread : playerThreadsArray) {
+                playerThread.start();
+            }
         }
     }
-
+    
     public static int checkPlayers(String players) {
         int playerCount = 0;
         // Check if input players can be converted to an integer
