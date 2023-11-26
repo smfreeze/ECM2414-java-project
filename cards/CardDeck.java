@@ -8,20 +8,24 @@ public class CardDeck {
     private Integer number;
     public static final Object globalLock = new Object();
 
+    // Constructs CardDeck object with the deck's number
     public CardDeck(Integer number) {
         this.number = number;
     }
 
+    // Adds card to the end of the queue
     public synchronized void addCard(Card card) {
         synchronized (globalLock) {
             deck.add(card);
         }
     }
 
+    // Returns the deck's number
     public synchronized Integer getNumber() {
         return number;
     }
 
+    // Returns the card at the front of the queue and removes it only if the queue is not empty
     public synchronized Card removeCard() {
         synchronized (globalLock) {
             if (deck.size() != 0) {
@@ -31,11 +35,13 @@ public class CardDeck {
         }
     }
 
+    // Returns the length of the deck
     public synchronized Integer getSize() {
         return deck.size();
     }
 
-    public String handToString() {
+    // Converts the deck into string format to be written into their output file
+    public String deckToString() {
         StringBuilder builder = new StringBuilder();
         for (Card card : deck) {
             builder.append(card.getNumber()).append(" ");
