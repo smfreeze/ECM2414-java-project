@@ -42,12 +42,12 @@ public class CardGame {
         Player[] playersArray = new Player[playerCount];
 
         ArrayList<ArrayList<Card>> tempPlayersArray = new ArrayList<ArrayList<Card>>();
-        ArrayList<ArrayList<Integer>> playersCardNumbersArray = new ArrayList<ArrayList<Integer>>();
+        ArrayList<ArrayList<Integer>> tempHandsArray = new ArrayList<ArrayList<Integer>>();
 
         // Initialises the player hands
         for (int x = 0; x < playerCount; x++) {
             tempPlayersArray.add(new ArrayList<Card>());
-            playersCardNumbersArray.add(new ArrayList<Integer>());
+            tempHandsArray.add(new ArrayList<Integer>());
         }
 
         // Initialises the card decks
@@ -58,7 +58,7 @@ public class CardGame {
         // Deals players their cards in round robin fashion
         for (int x = 0; x < playerCount * 4; x++) {
             tempPlayersArray.get(x % playerCount).add(pack.get(x));
-            playersCardNumbersArray.get(x % playerCount).add(pack.get(x).getNumber());
+            tempHandsArray.get(x % playerCount).add(pack.get(x).getNumber());
         }
 
         // Deals the cards in a round robin fashion to the decks
@@ -68,38 +68,41 @@ public class CardGame {
 
         // Checks if any inital hands fulfill the win condition
         int startWin = -1;
-        for (int pos = 0; pos < playersCardNumbersArray.size(); pos++) {
-            if (new HashSet<Integer>(playersCardNumbersArray.get(pos)).size() == 1) {
+        for (int pos = 0; pos < tempHandsArray.size(); pos++) {
+            if (new HashSet<Integer>(tempHandsArray.get(pos)).size() == 1
+                    && tempHandsArray.get(pos).get(0) == pos + 1) {
                 // Stores the winning player number
-                startWin = pos+1;
+                startWin = pos + 1;
                 break;
             }
         }
 
         if (startWin != -1) { // There is a player who has started with a winning hand
-            for (int playerNumber = 1; playerNumber < tempPlayersArray.size()+1; playerNumber++) {
+            for (int playerNumber = 1; playerNumber < tempPlayersArray.size() + 1; playerNumber++) {
                 // Creates output text files for player and deck
                 String playerFileName = "player" + playerNumber + "_output.txt";
                 String deckFileName = "deck" + playerNumber + "_output.txt";
                 StringBuilder builder = new StringBuilder();
-                for (Integer cardNum : playersCardNumbersArray.get(playerNumber-1)) {
-                    builder.append(cardNum+" ");
+                for (Integer cardNum : tempHandsArray.get(playerNumber - 1)) {
+                    builder.append(cardNum + " ");
                 }
                 try (BufferedWriter writer = new BufferedWriter(new FileWriter(playerFileName))) {
                     writer.write("player " + playerNumber + " initial hand " + builder + "\n");
-                    if (playerNumber == startWin) { // Writing into winning player output file 
+                    if (playerNumber == startWin) { // Writing into winning player output file
                         writer.write("player " + playerNumber + " wins\n");
                         writer.write("player " + playerNumber + " exits\n");
                         writer.write("player " + playerNumber + " final hand:" + builder + "\n");
                         System.out.println("player " + playerNumber + " wins");
-                    } else { // Writing into losing player output file 
-                        writer.write("player " + startWin + " has informed player " + playerNumber + " that player " + startWin + " has won\n");
+                    } else { // Writing into losing player output file
+                        writer.write("player " + startWin + " has informed player " + playerNumber + " that player "
+                                + startWin + " has won\n");
                         writer.write("player " + playerNumber + " exits\n");
                         writer.write("player " + playerNumber + " final hand: " + builder + "\n");
                     }
-                    try (BufferedWriter writer2 = new BufferedWriter(new FileWriter(deckFileName))) { 
-                        // Writing into deck output file 
-                        writer2.write("deck" + playerNumber + " contents: " + deckArray[playerNumber-1].deckToString());
+                    try (BufferedWriter writer2 = new BufferedWriter(new FileWriter(deckFileName))) {
+                        // Writing into deck output file
+                        writer2.write(
+                                "deck" + playerNumber + " contents: " + deckArray[playerNumber - 1].deckToString());
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -126,7 +129,7 @@ public class CardGame {
             }
         }
     }
-    
+
     // Checks if the input for number of players is valid
     private static int checkPlayers(String players) {
         int playerCount = 0;
@@ -165,7 +168,7 @@ public class CardGame {
                 if (countCards.get(num) == null) {
                     countCards.put(num, 1);
                 } else {
-                    countCards.put(num, countCards.get(num)+1);
+                    countCards.put(num, countCards.get(num) + 1);
                 }
 
                 // Instantiates card and adds to array of cards
