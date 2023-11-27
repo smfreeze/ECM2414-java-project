@@ -21,11 +21,12 @@ public class CardDeck {
     }
 
     // Returns the deck's number
-    public synchronized Integer getNumber() {
+    public Integer getNumber() {
         return number;
     }
 
-    // Returns the card at the front of the queue and removes it only if the queue is not empty
+    // Returns the card at the front of the queue and removes it only if the queue
+    // is not empty
     public synchronized Card removeCard() {
         synchronized (globalLock) {
             if (deck.size() != 0) {
@@ -36,7 +37,7 @@ public class CardDeck {
     }
 
     // Returns the length of the deck
-    public synchronized Integer getSize() {
+    public Integer getSize() {
         return deck.size();
     }
 
