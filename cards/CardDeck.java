@@ -42,7 +42,7 @@ public class CardDeck {
     }
 
     // Converts the deck into string format to be written into their output file
-    public String deckToString() {
+    public synchronized String deckToString() {
         StringBuilder builder = new StringBuilder();
         for (Card card : deck) {
             builder.append(card.getNumber()).append(" ");
