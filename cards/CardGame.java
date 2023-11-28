@@ -66,11 +66,10 @@ public class CardGame {
             deckArray[x % playerCount].addCard(pack.get(x));
         }
 
-        // Checks if any inital hands fulfill the win condition
+        // Checks if any initial hands fulfil the win condition
         int startWin = -1;
         for (int pos = 0; pos < tempHandsArray.size(); pos++) {
-            if (new HashSet<Integer>(tempHandsArray.get(pos)).size() == 1
-                    && tempHandsArray.get(pos).get(0) == pos + 1) {
+            if (new HashSet<Integer>(tempHandsArray.get(pos)).size() == 1) {
                 // Stores the winning player number
                 startWin = pos + 1;
                 break;
