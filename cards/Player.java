@@ -51,7 +51,7 @@ public class Player implements Runnable {
                 writer.write("player " + winner + " has informed player " + playerNumber + " that player " + winner
                         + " has won\n");
                 writer.write("player " + playerNumber + " exits\n");
-                writer.write("player " + playerNumber + " final hand: " + handToString() + "\n");
+                writer.write("player " + playerNumber + " final hand: " + handToString());
                 writer2.write("deck" + leftDeck.getNumber() + " contents: " + leftDeck.deckToString());
             }
         } catch (IOException e) {
