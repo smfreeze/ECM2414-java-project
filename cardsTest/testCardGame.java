@@ -1,3 +1,5 @@
+package cardsTest;
+
 import cards.CardGame;
 import cards.Card;
 

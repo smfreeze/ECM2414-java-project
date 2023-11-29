@@ -1,3 +1,5 @@
+package cardsTest;
+
 import cards.Card;
 
 import org.junit.Test;

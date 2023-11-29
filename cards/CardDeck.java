@@ -6,7 +6,6 @@ import java.util.Queue;
 public class CardDeck {
     private Queue<Card> deck = new LinkedList<>();
     private Integer number;
-    public static final Object globalLock = new Object();
 
     // Constructs CardDeck object with the deck's number
     public CardDeck(Integer number) {
@@ -15,9 +14,7 @@ public class CardDeck {
 
     // Adds card to the end of the queue
     public synchronized void addCard(Card card) {
-        synchronized (globalLock) {
-            deck.add(card);
-        }
+        deck.add(card);
     }
 
     // Returns the deck's number
@@ -28,12 +25,10 @@ public class CardDeck {
     // Returns the card at the front of the queue and removes it only if the queue
     // is not empty
     public synchronized Card removeCard() {
-        synchronized (globalLock) {
-            if (deck.size() != 0) {
-                return deck.remove();
-            }
-            return null;
+        if (deck.size() != 0) {
+            return deck.remove();
         }
+        return null;
     }
 
     // Returns the length of the deck
