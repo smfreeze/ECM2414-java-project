@@ -90,13 +90,13 @@ public class CardGame {
                     if (playerNumber == startWin) { // Writing into winning player output file
                         writer.write("player " + playerNumber + " wins\n");
                         writer.write("player " + playerNumber + " exits\n");
-                        writer.write("player " + playerNumber + " final hand:" + builder + "\n");
+                        writer.write("player " + playerNumber + " final hand:" + builder);
                         System.out.println("player " + playerNumber + " wins");
                     } else { // Writing into losing player output file
                         writer.write("player " + startWin + " has informed player " + playerNumber + " that player "
                                 + startWin + " has won\n");
                         writer.write("player " + playerNumber + " exits\n");
-                        writer.write("player " + playerNumber + " final hand: " + builder + "\n");
+                        writer.write("player " + playerNumber + " final hand: " + builder);
                     }
                     try (BufferedWriter writer2 = new BufferedWriter(new FileWriter(deckFileName))) {
                         // Writing into deck output file
